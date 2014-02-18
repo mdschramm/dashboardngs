@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+{% load url from future %}
+
+{% block title %}Profile{% endblock title %}
+
+{% block content %}
+<h1>
+	{% if user.first_name %}
+	Welcome, {{ user.first_name }}!
+	{% else %}
+	Welcome!
+    {% endif %}
+</h1>
+
+<h2>Account info:</h2>
+<dl>
+    <dt>Username</dt>
+    <dd>{{ user.username }}</dd>
+    <dt>Name</dt>
+    <dd>{{ user.first_name }} {{user.last_name }} (<a href={% url "profile_edit" %}>edit</a>)</dd>
+    <dt>Join date</dt>
+    <dd>{{ user.date_joined|date:"F j, Y" }}</dt>
+</dl>
+
+<a href={% url "auth_password_change" %}>Change Password</a>
+{% endblock content %}

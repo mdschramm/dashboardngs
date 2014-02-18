@@ -1,0 +1,14 @@
+PROJECT={{ project }}
+INPUT={{ xml }}
+PIPELINE={{ pipeline }}
+
+TUMOR_PURITY={{ tumor_purity }}
+
+INTERVAL=$(CAPTURES_ROOT)/{{ interval }}
+BAIT_INTERVAL=$(CAPTURES_ROOT)/{{ bait_interval }}
+
+SCATTERGATHER={{ scatter_gather }}
+THREADS={{ threads }}
+RUN_ARGS={{ walltime }}
+
+include $(NGSMAKE_ROOT)/workflow.mk

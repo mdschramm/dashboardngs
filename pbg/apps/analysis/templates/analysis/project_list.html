@@ -1,0 +1,52 @@
+{% extends 'analysis/analysis.html' %}
+{% load url from future %}
+{% load analysis_tags %}
+
+{% block title %}Analysis{% endblock %}
+
+{% block content %}
+<div class="box">
+	<div class="box-header">
+		<h2>
+			<i class="icon-th"></i>
+			<span class="break"></span>
+			CancerSeq Dashboard
+		</h2>
+	</div>
+	<div class="box-content">
+		<!-- extra dataTable tag there if we move away from perfectum -->
+		<table class="table bootstrap-datatable datatable dataTable">
+			<thead>
+				<tr>
+					<th>Project</th>
+					<th>Pathology</th>
+					<th>Sequencing</th>
+					<th>FASTQs</th>
+					<th>BAMs</th>
+					<th>QCs</th>
+					<th>VCFs</th>
+				</tr>
+			</thead>
+			<tbody>
+				{% for project in projects %}
+				<tr>
+					<td>
+						<a class="btn btn-link" href={% url "analysis:project_detail" project.name %}><h1>{{ project.name }}</h1></a>
+						{% if project.version > 1 %}
+						<br />
+						(version {{ project.version }})
+						{% endif %}
+					</td>
+                    <td>{% include "analysis/minitable_pathology.html" %}</td>
+                    <td>{% include "analysis/minitable_sequencing.html" %}</td>
+                    <td>{% include "analysis/minitable_fastq.html" %}</td>
+                    <td>{% include "analysis/minitable_bam.html" %}</td>
+                    <td>{% include "analysis/minitable_metric.html" %}</td>
+                    <td>{% include "analysis/minitable_vcf.html" %}</td>
+				</tr>
+				{% endfor %}
+			</tbody>
+		</table>
+	</div>
+</div>
+{% endblock %}

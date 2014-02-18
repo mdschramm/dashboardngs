@@ -1,0 +1,14 @@
+{% extends "projects/analysis_detail.html" %}
+{% load projects_tags %}
+
+{% block analysis_info %}
+<h1>Summary</h1>
+{% analysis_summary analysis %}
+
+{% if annol_results %}
+	<h1>NGS Pipeline Results</h1>
+	<h1>Manual Review</h1>
+	<h1>Final Calls</h1>
+{% endif %}
+
+{% endblock analysis_info %}

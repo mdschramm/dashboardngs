@@ -1,0 +1,2 @@
+PROJECT=PID123
+OUT_DIR=fancy_dir

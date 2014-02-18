@@ -1,0 +1,11 @@
+{% extends "runstatus/run_status.html" %}
+
+{% block content %}
+<form action="" method="post">
+	{% csrf_token %}
+    <table>
+		{{ form.as_p }}
+	</table>
+    <input class="btn" type="submit" id="submit" value="{% if form_value %}{{ form_value }}{% else %}Submit{% endif %}">
+</form>
+{% endblock content %}

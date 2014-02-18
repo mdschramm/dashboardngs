@@ -1,0 +1,11 @@
+{% load url from future %}
+
+<ul class="nav nav-stacked nav-tabs">
+	{% for machine in machines %}
+        {% if machine == current_machine %}
+		<li class="active"><a href="#">{{ machine.capitalize }}</a></li>
+		{% else %}
+		<li><a href={% url "run_status:run_status" machine %}>{{ machine.capitalize }}</a></li>
+		{% endif %}
+	{% endfor %}
+</ul>

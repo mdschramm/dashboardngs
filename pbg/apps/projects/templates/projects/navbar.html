@@ -1,0 +1,18 @@
+{% load url from future %}
+
+<nav class="navbar navbar-inverse" role="navigation">
+    <div class="navbar-header">
+        <a class="navbar-brand" href={% url "projects:study_list" %}>Multiscale Dashboard</a>
+    </div>
+	<div class="collapse navbar-collapse navbar-ex1-collapse">
+		<ul class="nav navbar-nav">
+			{% for study_ in study_list %}
+				{% if study_.name|lower == study.name|lower %}
+					<li class="active"><a href="#">{{ study_.name }}</a></li>
+				{% else %}
+                    <li><a href={% url "projects:project_list" study_.name %}>{{ study_.name }}</a></li>
+				{% endif %}
+			{% endfor %}
+		</ul>
+	</div>
+</nav>

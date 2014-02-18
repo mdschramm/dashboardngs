@@ -1,0 +1,22 @@
+{% extends 'analysis/analysis.html' %}
+
+{% block content %}
+{% if form.errors.custom %}
+    <p>Error: {{ form.errors.custom }}</p>
+{% endif %}
+<form action="" method="post">
+	{% csrf_token %}
+    <table>
+		{{ form.as_p }}
+	</table>
+	<input class="btn" type="submit" id="submit" value="{{ form_value }}">
+</form>
+{% endblock %}
+
+{% block javascript %}
+	{% if js_list %}
+		{% for js_file in js_list %}
+		<script src={{ STATIC_URL }}"{{ js_file }}"></script>
+		{% endfor %}
+	{% endif %}
+{% endblock %}

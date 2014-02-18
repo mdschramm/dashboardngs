@@ -1,0 +1,30 @@
+{% extends 'base.html' %}
+{% load url from future %}
+{% load upload_tags %}
+
+{% block content %}
+<ul class="chat">
+    {% for comment in comments %}
+    <li class="left">
+        <div class="row">
+            <div class="span8">
+                <img class="avatar" src="{{ STATIC_URL }}img/unknown-user.gif" />
+                <span class="message">
+                    <span class="pull-right"><a href={% url "comments:delete" comment.pk %}>&times;</a>&nbsp;</span>
+                    <span class="from"><strong>{{ comment.user.user.username }}</strong></span> :
+                    <span class="time">{{ comment.time }}</span>
+                    <span class="text">{{ comment.comment }}</span>
+                </span>
+            </div>
+            <div class="span4">
+                {% show_uploads comment "comment" %}
+            </div>
+        </div>
+    </li>
+    {% empty %}
+        <p>No comments to show.</p>
+    {% endfor %}
+</ul>
+<a class="btn" href={% url "comments:post" content_type_id object_id description %}>Comment</a>
+<a class="btn" href="{{ back_url }}">Back</a>
+{% endblock %}

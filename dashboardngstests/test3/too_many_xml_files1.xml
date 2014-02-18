@@ -1,0 +1,6 @@
+<?xml version="1.0"?>
+<cohort platform="illumina" library="mixed"  platform_unit="mixed">
+<fastq id="" sample="PT000_Normal"></fastq>
+<fastq id="" sample="PT000_Tumor"></fastq>
+</cohort>
+

@@ -1,0 +1,19 @@
+.table table tr td:first-child  {	
+	min-width: 40px;
+	max-width: 100%;
+	text-align: left;
+	font-size: 12px
+}
+
+
+.table thead {
+	overflow-y:scroll;
+}
+
+
+.table table tr td {
+	text-align:center;
+	padding: 8px 2px;
+	/*max-width: 14px;*/
+}
+

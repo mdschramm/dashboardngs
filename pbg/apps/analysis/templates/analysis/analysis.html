@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+{% load url from future %}
+{% load analysis_tags %}
+
+{% block sidebar %}
+{% if perms.analysis.add_project %}
+<a href={% url "analysis:new_project_form" %} class="btn btn-large btn-primary btn-block">Start New Project</a>
+<a href={% url "analysis:existing_project_form" %} class="btn btn-large btn-primary btn-block">Add Existing Project</a>
+{% endif %}
+{% sidebar %}
+{% endblock %}
+
+{% block javascript %}
+{{ block.super }}
+<script src="{{ STATIC_URL }}analysis.js"></script>
+{% endblock %}

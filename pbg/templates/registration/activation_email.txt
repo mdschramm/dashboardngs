@@ -1,0 +1,8 @@
+{% load url from future %}
+You have requested an account from the Multiscale Dashboard. You have {{ expiration_days }} days to
+activate this account. You may activate the account by following this link:
+
+{{ site }}{% url "registration_activate" activation_key %}
+
+
+If you experience any problems contact the Production Bioinformatics Group at mark.micchelli@mssm.edu.

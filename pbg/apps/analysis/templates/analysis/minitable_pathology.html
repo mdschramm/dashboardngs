@@ -1,0 +1,53 @@
+{% load url from future %}
+{% load upload_tags %}
+{% load comment_tags %}
+
+<table>
+    <thead>
+        <tr>
+			<td></td>
+			{% if project.wgs and project.wes %}
+				<td><span class="letterP4" >E+G</span></td>
+			{% elif project.wgs %}
+				<td><span class="letterP4" >WGS</span></td>
+			{% elif project.wes %}
+				<td><span class="letterP4" >WES</span></td>
+			{% endif %}
+			{% if project.rna %}
+				<td><span class="letterP4" >RNA</span></td>
+			{% endif %}
+		</tr>
+	</thead>
+	<tbody>
+
+		{% for sample in project.samples %}
+		<tr>
+			<td>{{ sample }}</td>
+			{% if project.wgs or project.wes %}
+				{% if sample.pathology_dna.value %}
+					<td><span class="label label-success">&nbsp</span></td>
+				{% else %}
+					<td><span class="label label-important">&nbsp</span></td>
+				{% endif %}
+			{% endif %}
+			{% if project.rna %}
+				{% if not sample.tumor %}
+					<td>&nbsp;</td>
+				{% elif sample.pathology_rna.value %}
+					<td><span class="label label-success">&nbsp</span></td>
+				{% else %}
+					<td><span class="label label-important">&nbsp</span></td>
+				{% endif %}
+			{% endif %}
+		</tr>
+        {% endfor %}
+        <tr>
+            <td colspan=3>
+				{% comment project "pathology" %}
+				{% if perms.analysis.change_project %}
+                <a class="btn btn-mini pathology-toggle" href={% url "analysis:pathology_toggle_form" project.name %}><i class="icon-check"></i></a>
+                {% endif %}
+            </td>
+		</tr>
+	</tbody>
+</table>

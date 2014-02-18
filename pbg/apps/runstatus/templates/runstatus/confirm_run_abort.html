@@ -1,0 +1,14 @@
+{% extends "runstatus/run_status.html" %}
+
+{% block content %}
+Are you sure you want to mark the run as aborted?
+<form action="" method="post">
+	{% csrf_token %}
+    <table>
+		{{ form.as_p }}
+	</table>
+    <input class="btn" type="submit" id="submit" value="Yes">
+    <a class="btn" href="{{ back_url }}">No</a>
+</form>
+{% endblock content %}
+

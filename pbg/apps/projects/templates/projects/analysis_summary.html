@@ -1,0 +1,38 @@
+{% load url from future %}
+
+<div class="row">
+    <div class="col-md-4">
+    {% if show_progress %}
+        <table class="table table-bordered">
+            <thead>
+                <tr>
+                    {% for results_file in results_files %}
+                    <th>{{ results_file }}</th>
+                    {% endfor %}
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    {% for status, color in status_list %}
+                    <td class="{{ color }}">{{ status }}</td>
+                    {% endfor %}
+                </tr>
+            </tbody>
+        </table>
+    {% endif %}
+    {% if sample_list %}
+        <dl>
+            <dt>Samples Used</dt>
+            <dd>
+                {% for sample in sample_list %}
+                    {% if forloop.last %}
+                    {{ sample.name }}
+                    {% else %}
+                    {{ sample.name }},
+                    {% endif %}
+                {% endfor %}
+            </dd>
+        </dl>
+    {% endif %}
+    </div>
+</div>

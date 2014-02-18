@@ -1,0 +1,19 @@
+{% load staticfiles %}
+{% load projects_tags %}
+
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<link href={% static "projects/css/bootstrap.min.css" %} rel="stylesheet" media="screen">
+	</head>
+	<body>
+		<div class="container">
+			{% navbar %}
+            {% block content %}{% endblock content %}
+		</div>
+        <script src="//code.jquery.com/jquery.js"></script>
+        <script src={% static "projects/js/bootstrap.min.js" %}></script>
+	</body>
+</html>

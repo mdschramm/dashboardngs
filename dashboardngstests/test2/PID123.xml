@@ -1,0 +1,12 @@
+<?xml version="1.0"?>
+<cohort platform="illumina" library="mixed"  platform_unit="mixed">
+<fastq id="12345" sample="PID123_Normal" type="Normal">
+<fastq1 file=""/>
+<fastq2 file=""/>
+</fastq>
+<fastq id="12345" sample="PID123_Tumor" type="Tumor" normal="PID123_Normal" purity="0.50">
+<fastq1 file=""/>
+<fastq2 file=""/>
+</fastq>
+</cohort>
+

@@ -1,0 +1,11 @@
+#CancerSeq:GBM_MSSM:1:/projects/ngs/research/vaccine/D_751
+#CancerSeq:PID4447:1:/projects/ngs/research/vaccine/LA
+#CancerSeq:PID4413:1:/projects/ngs/research/vaccine/PID4413/combined
+#CancerSeq:PID4468:1:/projects/ngs/research/vaccine/PID4468/combined
+#CancerSeq:PID4418:1:/projects/ngs/research/vaccine/PID4418/combined
+#CancerSeq:PID4596_13006:1:/projects/ngs/research/cancer/PID4596/combined
+#Ovarian:PT165:2:/projects/ngs/research/cancer/PT165
+#Ovarian:PT087:2:/projects/ngs/research/cancer/PT087
+#Ovarian:PT218:4:/projects/ngs/research/cancer/PT218
+#Ovarian:PT211:3:/projects/ngs/research/cancer/PT211
+Ovarian:PT211:3:/projects/PBG/PT211/exome-s1

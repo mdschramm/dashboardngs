@@ -1,0 +1,71 @@
+{% load url from future %}
+{% load upload_tags %}
+{% load comment_tags %}
+
+<table>
+    <thead>
+		<tr>
+			<td></td>
+			{% if project.wgs and project.wes %} 
+				<td><span class="letterP4">E+G</span></td>
+			{% elif project.wgs %}
+				<td><span class="letterP4">WGS</span></td>
+			{% elif project.wes %}
+				<td><span class="letterP4">WES</span></td>
+			{% endif %}
+			{% if project.rna %}
+				<td><span class="letterP4">RNA</span></td>
+			{% endif %}
+		 </tr>
+	 </thead>
+	 <tbody>
+		{% for sample in project.samples %}
+			<tr> 
+				<td>{{ sample }}</td>
+				{% if project.wgs or project.wes %}
+					<td>
+						<a href="#" class="sample-tooltip" data-title="{{ sample.bam_status }}">
+							{% if sample.bam_status == "Done." %}
+							<span class="label label-success">
+							{% elif sample.bam_status == "Not yet cleaned." or sample.bam_status == "FASTQs Not Ready." %}
+							<span class="label label-important">
+							{% else %}
+							<span class="label label-warning">
+                            {% endif %}
+								&nbsp;
+							</span>
+						</a>
+					</td>
+				{% endif %}
+				{% if project.rna %}
+					{% if not sample.tumor %}
+						<td>&nbsp;</td>
+					{% elif project.bams %}
+						<td><span class="label label-success">&nbsp;</span></td>
+					{% else %}
+						<td><span class="label label-important">&nbsp;</span></td>
+					{% endif %}
+				{% endif %}
+			</tr>
+		{% endfor %}
+		<tr>
+			<td colspan=3>
+				{% comment project "bam" %}
+				<div class="btn-group">
+					{% if project.bams %}
+						<a class="btn btn-mini dropdown-toggle" data-toggle="dropdown" href="#">BAMs<span class="caret"></span></a>
+						<ul class="dropdown-menu pull-right">
+							<li><a href={% url "analysis:gene_form" project.name %}>Coverage Tool</a><li>
+							<li class="divider"></li>
+							{% for item in project.bams %}
+								<li><a href="#">{{ item }}</a></li>
+							{% endfor %}
+						</ul>
+					{% else %}
+						<a class="btn btn-mini disabled">BAMs<span class="caret"></span></a>
+					{% endif %}
+				</div>
+			</td>
+        </tr>
+	</tbody>
+</table>

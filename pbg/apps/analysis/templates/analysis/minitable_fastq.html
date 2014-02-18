@@ -1,0 +1,55 @@
+{% load url from future %}
+{% load upload_tags %}
+{% load comment_tags %}
+
+<table>
+	<thead>
+		<tr>
+			<td></td>
+			{% if project.wgs %}
+				<td><span class="letterP4">WGS</span></td>
+			{% endif %}
+			{% if project.wes %}
+				<td><span class="letterP4">WES</span></td>
+			{% endif %}
+			{% if project.rna %}
+				<td><span class="letterP4">RNA</span></td>
+			{% endif %}
+		 </tr>
+	 </thead>
+	 <tbody>
+		{% for sample in project.samples %}
+			<tr>
+				<td>{{ sample }}</td>
+				{% if project.wgs %}
+					{% if sample.sequencing_info_wgs.fastq_done or sample.sequenced %}
+                    <td><a href="#" class="sample-tooltip" data-title="FASTQs ready."><span class="label label-success">&nbsp;</span></a></td>
+					{% else %}
+                    <td><a href="#" class="sample-tooltip" data-title="FASTQs not ready."><span class="label label-important">&nbsp;</span></a></td>
+					{% endif %}
+				{% endif %}
+				{% if project.wes %}
+					{% if sample.sequencing_info_wes.fastq_done or sample.sequenced %}
+                    <td><a href="#" class="sample-tooltip" data-title="FASTQs ready."><span class="label label-success">&nbsp;</span></a></td>
+					{% else %}
+                    <td><a href="#" class="sample-tooltip" data-title="FASTQs not ready."><span class="label label-important">&nbsp;</span></a></td>
+					{% endif %}
+				{% endif %}
+				{% if project.rna %}
+					{% if not sample.tumor %}
+                    <td>&nbsp;</td>
+					{% elif sample.sequencing_info_rna.fastq_done or sample.sequenced %}
+                    <td><a href="#" class="sample-tooltip" data-title="FASTQs ready."><span class="label label-success">&nbsp;</span></a></td>
+					{% else %}
+                    <td><a href="#" class="sample-tooltip" data-title="FASTQs not ready."><span class="label label-important">&nbsp;</span></a></td>
+					{% endif %}
+				{% endif %}
+            </tr>
+            {% endfor %}
+            <tr>
+                <td colspan=3>
+					{% comment project "fastq" %}
+                </td>
+			</tr>
+	</tbody>
+</table>

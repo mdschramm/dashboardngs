@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+{% load url from future %}
+
+{% block content %}
+<h1>Multiscale Dashboard</h1>
+{% if perms.runstatus.view_run %}
+<br>
+<a class="btn btn-large btn-success" href={% url "run_status:run_status" %}>Run Status Dashboard</a>
+<br>
+{% endif %}
+{% if perms.analysis.view_cancer_seq %}
+<br>
+<a class="btn btn-large btn-success" href={% url "analysis:project_list" %}>Analysis Dashboard</a>
+{% endif %}
+{% if not perms.analysis.view_cancer_seq and not perms.runstatus.view_run %}
+It looks like you are a new user. In order to get access to your projects, send an email to <a href="mark.micchelli@mssm.edu">mark.micchelli@mssm.edu</a>.
+{% endif %}
+
+{% endblock %}

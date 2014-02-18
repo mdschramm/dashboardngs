@@ -1,0 +1,101 @@
+{% extends "runstatus/run_status.html" %}
+{% load url from future %}
+{% load comment_tags %}
+{% load humanize %}
+
+{% block title %}{{ machine }}{% endblock %}
+
+{% block content %}
+{% if last_updated %}
+Last updated on {{ last_updated }}.
+{% endif %}
+<div class="box">
+    <div class="box-header">
+        <h2>
+            <i class="icon-th"></i>
+            <span class="break"></span>
+            {{ machine.capitalize }}'s Run Status
+        </h2>
+    </div>
+    <div class="box-content">
+        <table id="runtable" class="table table-bordered bootstrap-datatable datatable dataTable">
+            <thead>
+                <tr>
+                    <th width=25px>Run Number</th>
+                    <th width=100px>Run</th>
+                    <th width=75px>Start Date</th>
+                    <th width=75px>End Date</th>
+                    <th width=75px>Total Cycles</th>
+                    <th width=400px>Projects</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for run in runs %}
+                <tr>
+                    {% if run.run_number %}<td>{{ run.run_number }}</td>{% else %}<td>-</td>{% endif %}
+                    <td>{{ run.run_directory }}</td>
+                    <td>{{ run.start_date }}</td>
+                    {% if run.end_date %}<td>{{ run.end_date }}</td>{% else %}<td>-</td>{% endif %}
+                    {# label color is red if curcycle == 0, yellow if curcycle < cycles, and absent if curcycle == cycles #}
+                    {% if run.current_cycle == run.total_cycles %}
+                        <td>{{ run.current_cycle }}/{{ run.total_cycles }}</td>
+                    {% elif run.current_cycle == 0 %}
+                        <td><span class="label label-important">{{ run.current_cycle }}/{{ run.total_cycles }}</span></td>
+                    {% else %}
+                        <td><span class="label label-warning">{{ run.current_cycle }}/{{ run.total_cycles }}</span></td>
+                    {% endif %}
+                    <td>
+                        {% if run.sample_sheets %}
+                        <table style="word-break:break-all;" class="table table-bordered table-condensed">
+                            <tbody>
+                                {% for sample_sheet in run.sample_sheets %}
+                                    {% for project in sample_sheet.projects %}
+                                        <tr>
+                                            {% if forloop.first %}
+                                                <td width=150px rowspan={{ sample_sheet.projects.count }}>{{ sample_sheet.name }}</td>
+                                            {% endif %}
+                                            <td width=250px>
+                                                <a href="#" class="btn btn-link readspopover" data-original-title="{{ project }}" data-content="
+                                                    <table class='table'>
+                                                        <thead>
+                                                            <tr><th width=100px>Sample</th><th width=50px>Lanes</th><th width=100px>Reads</th></tr>
+                                                        </thead>
+                                                        <tbody>
+                                                            {% for sample in project.samples %}
+                                                            <tr>
+                                                                <td>{{ sample.name }}</td>
+                                                                <td>{{ sample.lanes }}</td>
+                                                                <td>{% if sample.reads %}{{ sample.reads|intcomma }}{% else %}-{% endif %}</td>
+                                                            </tr>
+                                                            {% endfor %}
+                                                        </tbody>
+                                                    </table>
+                                                    ">{{ project }}</a>
+                                            </td>
+                                            <td width=100px>
+                                                {% if project.fastq_ready %}
+                                                <span class="label label-success">FASTQ Ready</span>
+                                                {% else %}
+                                                <span class="label label-important">FASTQ <br \>Not Ready</span>
+                                                {% endif %}
+                                            </td>
+                                        </tr>
+                                    {% endfor %}
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                        {% elif run.aborted %}
+                            <span class="label label-warning">Run Aborted or Bad Quality</span>
+							{% comment run "abort_comment" %}
+                        {% else %}
+                            <span class="label label-important">Sample Sheets Not Generated</span>
+							<a class="btn btn-danger btn-mini" href={% url "run_status:mark_as_aborted" machine run.pk %}>Mark as Aborted</a>
+                        {% endif %}
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}

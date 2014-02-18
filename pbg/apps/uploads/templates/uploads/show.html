@@ -1,0 +1,12 @@
+{% load url from future %}
+
+<table class="table table-condensed">
+	<tbody>
+	{% for upload in uploads %}
+		<tr>
+			<td><a href="/{{ upload.upload.url }}">{{ upload.base_name }}</a></td>
+			<td><a href={% url "uploads:delete" upload.pk %}>&times;</a></td>
+		</tr>
+	{% endfor %}
+	</tbody>
+</table>

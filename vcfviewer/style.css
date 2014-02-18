@@ -1,0 +1,135 @@
+	body {
+		font-family: Homenaje, sans-serif, LeagueGothicRegular, 'Arial Narrow', Arial, Helvetica, sans-serif;
+	}
+	td { padding-left: 5; padding-right: 5; white-space: nowrap; }
+	#canvas {
+		position: absolute;
+		margin: 0 0 0 0;
+		width: 100%;
+		height: 100%;
+		padding: 0 0 0 0;
+		border: solid white 0px;
+	}
+
+	.tc0 { color: #3e3f61 }
+	.tc1 { color: #585989 }
+	.tc2 { color: #7792ba }
+	.tc3 { color: #a1b4cc }
+	.tc4 { color: #b1c4dc }
+	.tc0bg { background: #3e3f61 }
+	.tc1bg { background: #585989 }
+	.tc2bg { background: #7792ba }
+	.tc3bg { background: #a1b4cc }
+	.tc4bg { background: #d7e4f7 }
+	.tbgr1 { background: #f0f0ff }
+	.tbgr2 { background: #f7f7ff }
+	
+	.thdr  { background: #c0c0e0; color:white; padding-top:10px; padding-bottom:10px; }
+	.vcf { font-size:12px; }
+	.dim { color: #a1b4cc; }
+	.num { color: #9184ac; font-weight:bold; }
+
+	circle.node {
+		cursor: pointer;
+		stroke: #3182bd;
+		stroke-width: 1.5px;
+	}
+	line.link {
+		fill: none;
+		stroke: #9ecae1;
+		stroke-width: 1.5px;
+	}
+	
+	a { color: #3e3f61;
+		cursor: pointer;
+		text-decoration: none;
+		border-bottom:1px dotted;
+	}
+	#progress {
+		display:none;
+		position:fixed;
+		left:44%; top:44%;
+		margin-left: auto;
+		margin-right: auto;
+		padding: 3% 3% 3% 3%;
+		background: #a1b4cc;
+		border-style: dotted;
+		border-width: 1px;
+		border-color: #585989
+		color: #585989;
+		font-family: Trebuchet MS, Verdana;
+		font-size: 18px;
+		-moz-box-shadow: 0 0 30px 5px #999;
+		-webkit-box-shadow: 0 0 30px 5px #999;
+	}
+	.filectrl {
+		background-color: #fff;
+		width: 150px;
+	}
+	.button {
+		font-family: Trebuchet MS, Verdana;
+		font-size: 16px;
+		font-weight: bold;
+		padding: 2px;
+		padding-left:10px;
+		padding-right:10px;
+		text-decoration: none;
+		border: 1px solid #a1b4cc;
+	}
+	.button2 {
+		height:24px;
+		font-size:10px;
+		vertical-align:text-top;
+	}
+	.btnPressed {
+		color: #3e3f61;
+		background: none;
+		border: 1px dotted #3e3f61;
+	}
+	.btnReleased {
+		color: white;
+		background: #a1b4cc;
+		border: 1px solid #a1b4cc;
+	}
+	.plot_border {
+		border: 1px dotted #7792ba;
+	}
+	.hpadding { padding-left:10px; }
+	.title {
+		font-family:Trebuchet MS, Verdana;
+		letter-spacing: -0.08em;
+		font-size:34px;
+		font-weight:bold;
+	}
+	.ctrlval { color:navy; font-weight:bold; }
+	.dense { line-height: 80% }
+	.lt { color:grey; }
+	.bgl { background-color:#aaa; }
+	.tiny {
+		font-family:Trebuchet MS, Verdana;
+		font-size:12px;
+	}
+	.text {
+		font-family:Trebuchet MS, Verdana;
+		font-size:14px;
+		font-weight:normal;
+	}
+	.textB {
+		font-family:Trebuchet MS, Verdana;
+		font-size:14px;
+		font-weight:bold;
+	}
+	.title2 {
+		font-size: 14px;
+		letter-spacing: 0em;
+	}
+	.enter { width: 8em; }
+	li { margin: 0.5em 0; }
+	button { color: #555; }
+	ul {
+		list-style-type: none;
+		padding: 2em;
+		margin: 1em;
+	}
+	.bar { fill: steelblue; }
+	.warn { color:brown; font-weight:bold; }

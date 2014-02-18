@@ -1,0 +1,15 @@
+{% extends 'base.html' %}
+{% load url from future %}
+
+{% block content %}
+<form action="" method="post" enctype="multipart/form-data">
+	{% csrf_token %}
+    <table>
+        {{ form.as_table }}
+	</table>
+	<br>
+	<input class="btn" type="submit" id="submit" value="Upload">
+	<a class="btn" href="{{ back_url }}">Cancel</a>
+</form>
+{% endblock %}
+

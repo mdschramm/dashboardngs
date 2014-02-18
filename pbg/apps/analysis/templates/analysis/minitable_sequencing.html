@@ -1,0 +1,108 @@
+{% load url from future %}
+{% load upload_tags %}
+{% load comment_tags %}
+
+<table>
+	<thead>
+		<tr>
+			<td></td>
+			{% if project.wgs %}
+				<td><span class="letterP4">WGS</span></td>
+			{% endif %}
+			{% if project.wes %}
+				<td><span class="letterP4">WES</span></td>
+			{% endif %}
+			{% if project.rna %}
+				<td><span class="letterP4">RNA</span></td>
+			{% endif %}
+		 </tr>
+	 </thead>
+	 <tbody>
+		{% for sample in project.samples %}
+			<tr>
+				<td>{{ sample }}</td>
+				{% if project.wgs %}
+                    {% if sample.sequencing_info_wgs %}
+                    <td>
+                        <a href="#" class="sample-tooltip" data-title="{{ sample.sequencing_info_wgs.tooltip_text }}">
+                            {% if sample.sequenced or sample.sequencing_info_wgs.sequencing_done %}
+                            <span class="label label-success">
+							&nbsp;
+                            {% elif sample.sequencing_info_wgs.current_cycle %}
+                            <span class="label label-warning">
+							{{ sample.sequencing_info_wgs.current_cycle }}
+                            {% else %}
+                            <span class="label label-important">
+							&nbsp;
+                            {% endif %}
+                            </span>
+                        </a>
+                    </td>
+					{% elif sample.bam_status == "Done." or sample.bam_status == "De-duped, not yet recalibrated." or sample.bam_status == "Cleaned, not yet de-duped." %}
+                    <td><a href="#" class="sample-tooltip" data-title="Sequencing complete."><span class="label label-success">&nbsp;</span></a></td>
+                    {% else %}
+                    <td><a href="#" class="sample-tooltip" data-title="Sequencing info not found."><span class="label label-important">&nbsp;</span></a></td>
+                    {% endif %}
+				{% endif %}
+				{% if project.wes %}
+                    {% if sample.sequencing_info_wes %}
+                    <td>
+                        <a href="#" class="sample-tooltip" data-title="{{ sample.sequencing_info_wes.tooltip_text }}">
+                            {% if sample.sequenced or sample.sequencing_info_wes.sequencing_done %}
+                            <span class="label label-success">
+							&nbsp;
+                            {% elif sample.sequencing_info_wes.current_cycle %}
+                            <span class="label label-warning">
+							{{ sample.sequencing_info_wes.current_cycle }}
+                            {% else %}
+                            <span class="label label-important">
+							&nbsp;
+                            {% endif %}
+                            </span>
+                        </a>
+                    </td>
+					{% elif sample.bam_status == "Done." or sample.bam_status == "De-duped, not yet recalibrated." or sample.bam_status == "Cleaned, not yet de-duped." %}
+                    <td><a href="#" class="sample-tooltip" data-title="Sequencing complete."><span class="label label-success">&nbsp;</span></a></td>
+                    {% else %}
+                    <td><a href="#" class="sample-tooltip" data-title="Sequencing info not found."><span class="label label-important">&nbsp;</span></a></td>
+                    {% endif %}
+				{% endif %}
+				{% if project.rna %}
+                    {% if not sample.tumor %}
+                    <td>&nbsp;</td>
+                    {% elif sample.sequencing_info_rna %}
+                    <td>
+                        <a href="#" class="sample-tooltip" data-title="{{ sample.sequencing_info_rna.tooltip_text }}">
+                            {% if sample.sequenced or sample.sequencing_info_rna.sequencing_done %}
+                            <span class="label label-success">
+							&nbsp;
+                            {% elif sample.sequencing_info_rna.current_cycle %}
+                            <span class="label label-warning">
+							{{ sample.sequencing_info_rna.current_cycle }}
+                            {% else %}
+                            <span class="label label-important">
+							&nbsp;
+                            {% endif %}
+                            </span>
+                        </a>
+                    </td>
+					{% elif sample.bam_status == "Done." or sample.bam_status == "De-duped, not yet recalibrated." or sample.bam_status == "Cleaned, not yet de-duped." %}
+                    <td><a href="#" class="sample-tooltip" data-title="Sequencing complete."><span class="label label-success">&nbsp;</span></a></td>
+                    {% else %}
+                    <td><a href="#" class="sample-tooltip" data-title="Sequencing info not found."><span class="label label-important">&nbsp;</span></a></td>
+                    {% endif %}
+				{% endif %}
+			</tr>
+            {% endfor %}
+            <tr>
+                <td colspan=3>
+					{% for sample in project.samples %}
+						{% if forloop.first and sample.total_cycles %}
+						<strong>Total cycles: {{ sample.total_cycles }}</strong>
+						{% endif %}
+					{% endfor %}
+					{% comment project "sequencing" %}
+                </td>
+			</tr>
+	</tbody>
+</table>

@@ -1,0 +1,10 @@
+{% load url from future %}
+<ul class="nav nav-stacked nav-tabs">
+	{% for project in projects %}
+	{% if project.name == current_project_name %}
+		<li class=active><a href="#">{{ project.name }}</a></li>
+	{% else %}
+		<li><a href={% url "analysis:project_detail" project.name %}>{{ project.name }}</a></li>
+	{% endif %}
+	{% endfor %}
+</ul>

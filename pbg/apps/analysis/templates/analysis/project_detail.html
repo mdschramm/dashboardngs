@@ -1,0 +1,233 @@
+{% extends 'analysis/analysis.html' %}
+{% load url from future %}
+{% load analysis_tags %}
+
+{% block title %}{{ project.name }}{% endblock %}
+
+{% block content %}
+<div class="box">
+    <div class="box-header">
+        <h2>
+            <i class="icon-th"></i>
+            <span class="break"></span>
+			{% if project.cancer_name %}
+				{{ project.name }} - {{ project.cancer_name }}
+			{% else %}
+				{{ project.name }}
+			{% endif %}
+        </h2>
+    </div>
+    <div class="box-content">
+        <div id="sample-information">
+            <h1>Sample Information</h1>
+			<table class="table table-bordered">
+				<thead>
+					<tr><th>Sample</th><th>Tissue of Origin</th><th>RIN Score (if RNA)</th><th>Tumor Purity</th><th>Tumor Type</th><th>Tumor Class</th></tr>
+				</thead>
+				<tbody>
+					{% for sample in project.samples %}
+                        <tr>
+                            <td>{{ sample.name }}</td>
+                            <td>{{ sample.tissue_of_origin }}</td>
+							<td>{% if sample.rin_score %}{{ sample.rin_score }}{% else %}-{% endif %}</td>
+                            <td>
+                                {% if sample.tumor and sample.tumor_purity %}
+                                    {{ sample.tumor_purity }}
+                                {% elif sample.tumor %}
+                                    {# empty #}
+                                {% else %}
+                                    -
+                                {% endif %}
+                            </td>
+                            <td>{% if sample.tumor %}{{ sample.tumor_type }}{% else %}-{% endif %}</td>
+                            <td>{% if sample.tumor %}{{ sample.tumor_class }}{% else %}-{% endif %}</td>
+                        </tr>
+					{% endfor %}
+				</tbody>
+			</table>
+			{% if perms.analysis.change_project %}
+			<a href={% url "analysis:project_info_form" project.name %} class="btn">Edit</a>
+			{% endif %}
+        </div>
+        <hr>
+        <div id="current-progress">
+            <h1>Current Progress</h1>
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Pathology</th>
+                        <th>Sequencing</th>
+                        <th>FASTQs</th>
+                        <th>BAMs</th>
+                        <th>QCs</th>
+                        <th>VCFs</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+						<td>{% include "analysis/minitable_pathology.html" %}</td>
+						<td>{% include "analysis/minitable_sequencing.html" %}</td>
+						<td>{% include "analysis/minitable_fastq.html" %}</td>
+						<td>{% include "analysis/minitable_bam.html" %}</td>
+						<td>{% include "analysis/minitable_metric.html" %}</td>
+                        <td>{% include "analysis/minitable_vcf.html" %}</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <hr>
+        <div id="Directory Information">
+            <h1>Directory Information</h1>
+            <dl>
+                <dt>Path</dt>
+                <dd>{% if project.path %}{{ project.path }}{% else %}Not yet specified{% endif %}</dd>
+                <dt>Results Directory</dt>
+                <dd>{% if project.results_directory %}{{ project.results_directory }}{% else %}Not yet specified{% endif %}</dd>
+            </dl>
+			{% if perms.analysis.change_project %}
+			<a href={% url "analysis:project_directory_info_form" project.name %} class="btn">Edit</a>
+			{% endif %}
+        </div>
+        {% if gene_info %}
+        <hr>
+        <div id="candidate-gene-info">
+            {% if project.cancer_name %}
+            <h1>Candidate Gene Information for {{ project.cancer_name }}</h1>
+            {% else %}
+            <h1>Candidate Gene Information</h1>
+            {% endif %}
+            <table class="table bootstrap-datatable datatable dataTable table-striped table-bordered">
+                <thead>
+                    <tr>
+                        <th>Gene ID</th>
+                        <th>View</th>
+                        <th>Chromosome</th>
+                        <th>Start</th>
+                        <th>Stop</th>
+                        <th>Symbol</th>
+                        <th>Source</th>
+                        <th>Description</th>
+                    </tr>
+                </thead>
+                <tbody>
+                {% for row in gene_info %}
+                <tr>
+                    {% for item in row %}
+                        {% if forloop.counter0 == 1 %}
+                        <td><a class="btn btn-link" href="{{ item }}" target="_blank">View</a></td>
+                        {% else %}
+                        <td>{{ item }}</td>
+                        {% endif %}
+                    {% endfor %}
+                </tr>
+                {% endfor %}
+                <tbody>
+            </table>
+        </div>
+        {% endif %}
+        {% if variant_info %}
+		<hr>
+        <div id="candidate-variant-info">
+            <h1>Candidate Variant Information for {{ project.name }}</h1>
+            <h3>Note: Only first 1000 results shown.</h3>
+            <table class="table bootstrap-datatable datatable dataTable table-striped table-bordered variantSort">
+                <thead>
+                    <th>Sample Count</th>
+                    <th>View</th>
+                    <th>Mutation ID</th>
+                    <th>Symbol</th>
+                    <th>Gene ID</th>
+                    <th>Chromosome</th>
+                    <th>Start</th>
+                    <th>Stop</th>
+                    <th>Mutation CDS</th>
+                    <th>Mutation AA</th>
+                    <th>Mutation Description</th>
+                    {% for sample in project.samples %}
+                    <th>{{ sample.name }}</th>
+                    {% endfor %}
+                </thead>
+                <tbody>
+                {% for row in variant_info %}
+                <tr>
+                    {% for item in row %}
+                        {% if forloop.counter0 == 1 %}
+                        <td><a class="btn btn-link" href="{{ item }}" target="_blank">View</a></td>
+                        {% else %}
+                        <td>{{ item }}</td>
+                        {% endif %}
+                    {% endfor %}
+                </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        {% endif %}
+        {% if tier_info %}
+        <hr>
+        <div id="results">
+            <h1>Results</h1>
+            {% for name, tier_tuple in tier_info %}
+                <h2>{{ name }} Information</h2>
+                <ul class="nav nav-tabs">
+                    <li class="results_tab active" id="{{ name }}_results_tab_1"><a href="#">Tier 1</a></li>
+                    <li class="results_tab" id="{{ name }}_results_tab_2"><a href="#">Tier 2</a></li>
+                    <li class="results_tab" id="{{ name }}_results_tab_3"><a href="#">Tier 3</a></li>
+                </ul>
+                {% for tier in tier_tuple %}
+                    <table id="{{ name }}_results_table_{{ forloop.counter }}" class="table bootstrap-datatable datatable dataTable table-striped table-bordered">
+                        <thead>
+                            <tr>
+                                <th>id</th>
+                                <th>View</th>
+                                <th>Symbol</th>
+                                <th>dbSNP</th>
+                                <th>chrom</th>
+                                <th>pos</th>
+                                <th>ref</th>
+                                <th>alt</th>
+                                <th>varscanSomaticStatus</th>
+                                <th>pvalue</th>
+                                <th>filter</th>
+                                <th>effect</th>
+                                <th>effect_impact</th>
+                                <th>functional_class</th>
+                                <th>codon_change</th>
+                                <th>amino_acid_change</th>
+                                <th>Normal</th>
+                                <th>Tumor</th>
+                                <th>ESP5400_freq_All</th>
+                                <th>1000genome_freq_ALL</th>
+                                <th>source</th>
+                                <th>mutationType</th>
+                                <th>inRnaSeq</th>
+                                <th>regionAlignability</th>
+                                <th>lastUpdated</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for row in tier %}
+                                <tr>
+                                    {% for item in row %}
+                                        {% if forloop.counter0 == 1 %}
+                                            <td><a class="btn btn-link" href="{{ item }}" target="_blank">View</a></td>
+                                        {% else %}
+                                            <td>{{ item }}</td>
+                                        {% endif %}
+                                    {% endfor %}
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                {% endfor %}
+            {% endfor %}
+        </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}
+
+{% block javascript %}
+{{ block.super }}
+<script src="{{ STATIC_URL }}resultsTable.js"></script>
+{% endblock %}

@@ -1,0 +1,69 @@
+{% load url from future %}
+{% load upload_tags %}
+{% load comment_tags %}
+
+<table>
+	<thead>
+		<tr>
+			<td></td>
+			{% if project.wgs and project.wes %} 
+				<td><span class="letterP4">E+G</span></td>
+			{% elif project.wgs %}
+				<td><span class="letterP4">WGS</span></td>
+			{% elif project.wes %}
+				<td><span class="letterP4">WES</span></td>
+			{% endif %}
+			{% if project.rna %}
+				<td><span class="letterP4">RNA</span></td>
+			{% endif %}
+		 </tr>
+	 </thead>
+	 <tbody>
+		{% for sample in project.samples %}
+			<tr> 
+				<td>{{ sample }}</td>
+				{% if project.wgs or project.wes %}
+					<td>
+						<a href="#" class="sample-tooltip" data-title="{{ sample.vcf_status }}">
+							{% if sample.vcf_status == "Done." %}
+							<span class="label label-success">
+                            {% else %}
+							<span class="label label-important">
+                            {% endif %}
+								&nbsp;
+							</span>
+						</a>
+					</td>
+				{% endif %}
+				{% if project.rna %}
+					{% if not sample.tumor %}
+						<td>&nbsp;</span></td>
+					{% elif project.vcfs %}
+						<td><span class="label label-success">&nbsp;</span></td>
+					{% else %}
+						<td><span class="label label-important">&nbsp;</span></td>
+					{% endif %}
+				{% endif %}
+			</tr>
+		{% endfor %}
+		<tr>
+			<td colspan=3>
+				{% comment project "vcf" %}
+				<div class="btn-group">
+					{% if project.vcfs %}
+						<a class="btn btn-mini dropdown-toggle" data-toggle="dropdown" href="#">VCFs<span class="caret"></span></a>
+						<ul class="dropdown-menu pull-right">
+							<li><a href="#">VCF Placeholder</a><li>
+							<li class="divider"></li>
+							{% for item in project.vcfs %}
+								<li><a href="#">{{ item }}</a></li>
+							{% endfor %}
+						</ul>
+					{% else %}
+						<a class="btn btn-mini disabled">VCFs<span class="caret"></span></a>
+					{% endif %}
+				</div>
+			</td>
+        </tr>
+    </tbody>
+</table>

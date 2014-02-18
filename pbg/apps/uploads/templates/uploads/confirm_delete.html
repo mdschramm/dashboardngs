@@ -1,0 +1,10 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<p>Are you sure you want to delete {{ upload.base_name }}?</p>
+<form action="" method="post">
+	{% csrf_token %}
+	<input class="btn" type="submit" id="submit" value="Yes">
+	<a class="btn" href="{{ back_url }}">No</a>
+</form>
+{% endblock %}

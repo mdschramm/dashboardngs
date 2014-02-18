@@ -1,0 +1,13 @@
+{% extends 'base.html' %}
+{% load url from future %}
+
+{% block content %}
+<form action="" method="post" class="chat-form" enctype="multipart/form-data">
+	{% csrf_token %}
+	<table>
+		{{ form.as_p }}
+	</table>
+	<input class="btn" type="submit" id="submit" value="Post">
+	<a class="btn" href="{{ back_url }}">Back</a>
+</form>
+{% endblock %}

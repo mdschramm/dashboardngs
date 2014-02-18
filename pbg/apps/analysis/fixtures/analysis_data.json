@@ -1,0 +1,66 @@
+[
+    {
+        "pk": 1, 
+        "model": "analysis.project", 
+        "fields": {
+            "cancer_name": "Ovarian", 
+            "name": "PT208", 
+            "keyword": "", 
+            "results_directory": "results", 
+            "rna": true, 
+            "wes": true, 
+            "version": 1, 
+            "done": true, 
+            "wgs": false, 
+            "path": "/projects/ngs/research/cancer/PT208/exome"
+        }
+    }, 
+    {
+        "pk": 2, 
+        "model": "analysis.project", 
+        "fields": {
+            "cancer_name": "Pancreatic", 
+            "name": "LA", 
+            "keyword": "", 
+            "results_directory": "results", 
+            "rna": true, 
+            "wes": true, 
+            "version": 1, 
+            "done": true, 
+            "wgs": true, 
+            "path": "/projects/ngs/research/vaccine/LA_Version2/combined"
+        }
+    }, 
+    {
+        "pk": 3, 
+        "model": "analysis.project", 
+        "fields": {
+            "cancer_name": "", 
+            "name": "PID4596", 
+            "keyword": "", 
+            "results_directory": "results", 
+            "rna": true, 
+            "wes": true, 
+            "version": 1, 
+            "done": true, 
+            "wgs": true, 
+            "path": "/projects/ngs/research/cancer/PID4596/combined"
+        }
+    }, 
+    {
+        "pk": 4, 
+        "model": "analysis.project", 
+        "fields": {
+            "cancer_name": "Ovarian", 
+            "name": "PT000", 
+            "keyword": "", 
+            "results_directory": "", 
+            "rna": false, 
+            "wes": true, 
+            "version": 1, 
+            "done": false, 
+            "wgs": true, 
+            "path": ""
+        }
+    }
+]

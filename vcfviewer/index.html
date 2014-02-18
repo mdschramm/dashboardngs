@@ -1,0 +1,217 @@
+<html><head>
+<meta charset="utf-8">
+<meta http-equiv="Access-Control-Allow-Origin" content="*">
+<title>VCF|viewer</title>
+<link type="text/css" href="style.css" rel="stylesheet" />
+<link type="text/css" href="jquery-ui-1.10.3.custom/css/no-theme/jquery-ui-1.10.3.custom.min.css" rel="stylesheet" />
+<script type="text/javascript" src="jquery-2.0.2.min.js"></script>
+<script type="text/javascript" src="jquery-ui-1.10.3.custom/js/jquery-ui-1.10.3.custom.min.js"></script>
+<script type="text/javascript" src="vcflib.js"></script>
+<script type="text/javascript">
+
+	var vcf, btn2view = { 'btn1':'#ABTview', 'btn2':'#VCFview', 'btn3':'#STAview', 'btn4':'#EXPview' };
+	var somaticQ = true, lohQ = false, germlineQ = false, unknownQ = false, otherQ = false;
+	var filter = { Somatic:somaticQ, LOH:lohQ, Germline:germlineQ, Unknown:unknownQ, other:otherQ };
+
+	// ---------------------------------------------------------------------------------------------------------------------------------
+
+	$(document).ready(function() {
+
+		document.documentElement.ondragover = function () { return false; };
+		document.documentElement.ondragend = function () { return false; };
+		document.documentElement.ondrop = handleFileSelect;
+		document.getElementById('files').addEventListener('change', handleFileSelect, false);
+
+		$('[id^=btn]').click(function(event) {
+			var view = btn2view[event.target.id];	// button id --> view id
+			if ($(view).is(":visible")) return;		// already active, do nothing
+			$('[id$=view]').not(view).hide();		// select all views except current, hide
+			$(view).show();							// show current
+			$(event.target).removeClass('btnReleased').addClass('btnPressed');
+			$('[id^=btn]').not(event.target).removeClass('btnPressed').addClass('btnReleased');
+		});
+
+		$('#apply').button().click(function(){
+			somaticQ = $('#chkSomatic').is(':checked');
+			lohQ = $('#chkLoh').is(':checked');
+			germlineQ = $('#chkGermline').is(':checked');
+			unknownQ = $('#chkUnknown').is(':checked');
+			otherQ = $('#chkOther').is(':checked');
+			filter = { Somatic:somaticQ, LOH:lohQ, Germline:germlineQ, Unknown:unknownQ, other:otherQ };
+			$('#progress').show();
+			vcf.reRender(filter);
+		});
+
+		$('#exportJSON').button().click(function(){
+			console.log('JSON export, VCF rows : ' + vcf.data.length);
+			delete Array.prototype.toJSON;
+			var o = { rows : vcf.data };
+			var str = JSON.stringify(o, null, 2);
+			var win = window.open('','vcf|viewer --> export','');
+			win.document.open('text', 'replace');
+			// TODO: probably need <pre> for firefox
+			win.document.write('<pre>\n');
+			win.document.write(str);
+			win.document.write('</pre>\n');
+			win.document.close();
+		});
+
+		$('#chkSomatic').attr('checked', somaticQ);
+		$('#chkLoh').attr('checked', lohQ);
+		$('#chkGermline').attr('checked', germlineQ);
+		$('#chkUnknown').attr('checked', unknownQ);
+		$('#chkOther').attr('checked', otherQ);
+	});
+
+	function loadNewVCF(text) {
+		console.log('loadNewVCF');
+		$('#progress').show().html('updating html...');
+		switchToVCFView();
+		if (!vcf) vcf = createVCF();
+		vcf.asyncReadFromText(text, filter, vcfCallback);	// calls reRender
+	}
+	
+	// this gets called on msa reload only!
+	function switchToVCFView() {
+		$('#VCFtable').html('');
+		$('#STAview').hide();
+		$('#ABTview').hide();
+		$('#EXPview').hide();
+		$('#VCFview').show();
+		// TODO: doable with one wildcard selector
+		$('#btn1').removeClass('btnPressed').addClass('btnReleased');
+		$('#btn2').removeClass('btnReleased').addClass('btnPressed');
+		$('#btn3').removeClass('btnPressed').addClass('btnReleased');
+		$('#btn4').removeClass('btnPressed').addClass('btnReleased');
+	}
+
+	// -------------------------------------------------------------------------
+
+	var vcfCallback = {
+		progress : function(msg) { $('#progress').html(msg); },
+		fail : function(msg) { $('#progress').html(msg); },
+		doneReading : function(msg) {
+			console.log('doneReading...');
+
+			var vt = vcf.vartypeCount;
+			$('#nsomatic').html(vt.Somatic);
+			$('#nloh').html(vt.LOH);
+			$('#ngermline').html(vt.Germline);
+			$('#nunknown').html(vt.Unknown);
+			$('#nother').html(vt.other);
+			$('#nread').html(vt.read);
+			$('#nskipped').html(vt.skipped);
+
+			$('#VCFtable').html(vcf.htable);
+			$('#progress').hide();
+
+			$('#VCFview').show();
+			$('#buttons').show();
+		}
+	};
+
+	function handleDragOver(evt) {
+		evt.stopPropagation();
+		evt.preventDefault();
+		evt.dataTransfer.dropEffect = 'copy'; // Explicitly show this is a copy.
+	}
+	function handleFileSelect(evt) {
+	evt.stopPropagation(); evt.preventDefault();
+	var f = evt.target.files ? evt.target.files[0] : evt.dataTransfer.files[0];
+		if (!f) return;
+		$('#progress').show().html('reading the file...');
+		var r = new FileReader();
+		r.onload = function(e) { loadNewVCF(e.target.result); }
+		r.readAsText(f);
+		return false;
+	}
+
+</script>
+</head>
+<body>
+
+<!-- ------------------------------------------------------ site header table --------------------------------------------------- -->
+
+<table border='0'>
+	<tr><td align='left' style='vertical-align:top;' nowrap>
+		<span class='title tc1'>vcf</span><span class='title tc3'>|</span><span class='title tc2'>viewer</span><br>
+		<span style='line-height:96%'>
+		<span class='title title2 tc2'>list of variants visualization and some statistics</span><br>
+		<span class='tiny tc3'>release 0.2 beta</span><br></span><br>
+
+		<a id='btn1' class='button btnPressed'>about</a>
+		<span id='buttons' style='display:none;'>
+		&nbsp;&nbsp;&nbsp;<span class='tc2'>|</span>&nbsp;&nbsp;&nbsp;
+		<a id='btn2' class='button btnReleased'>VCF view</a> <span class='tc2'>|</span>
+		<a id='btn3' class='button btnReleased'>statistics</a>
+		<a id='btn4' class='button btnReleased'>export</a>
+		</span><br><span style='font-size:3px;'><br></span>
+
+	</td><td align='right' valign='bottom' width='99%' nowrap>
+
+	</td><td align='left' valign='bottom' class='textB tc0 tc4bg' style='padding:15px;' nowrap>
+		<span style='line-height:98%'>
+		Drag and drop your VCF file anywhere on this page<br>
+		<span style='font-size:5px;'><br></span></span>
+		<input type="file" id="files" class='filectrl' size='40'/><br>
+	</td></tr>
+	<tr><td colspan='3' height='2' class='tc4bg'></td></tr>
+</table><br>
+
+<!-- ------------------------------------------------------ stats view ---------------------------------------------------- -->
+
+<table border='0' style='display:none;' id="STAview">
+<tr><td valign='top'>
+
+</tr></table>
+
+<!-- ------------------------------------------------------ export view ---------------------------------------------------- -->
+
+<table border='0' style='display:none;' id="EXPview">
+<tr><td valign='top'>
+
+<br><br>
+<button style='height:24px; font-size:12px;' id='exportJSON'> export as JSON </button><br><br>
+
+</tr></table>
+
+<!-- ------------------------------------------------------ VCF view ---------------------------------------------- -->
+
+<table border='0' cellpadding='1' cellspacing='1' style='display:none;' id="VCFview">
+<tr><td class='dim vcf'>
+<input type="checkbox" id="chkSomatic" /> Somatic : <span id='nsomatic' class='num'></span> &nbsp; | &nbsp;
+<input type="checkbox" id="chkLoh" /> LOH : <span id='nloh' class='num'></span> &nbsp; | &nbsp;
+<input type="checkbox" id="chkGermline" /> Germline : <span id='ngermline' class='num'></span> &nbsp; | &nbsp;
+<input type="checkbox" id="chkUnknown" /> Unknown : <span id='nunknown' class='num'></span> &nbsp; | &nbsp;
+<input type="checkbox" id="chkOther" /> other : <span id='nother' class='num'></span> &nbsp; | &nbsp;
+total read : <span id='nread' class='num'></span> &nbsp; | &nbsp;
+skipped (FILTER not PASS) : <span id='nskipped' class='num'></span>
+<br><br>
+
+<button style='height:24px; font-size:12px;' id='apply'> apply </button><br><br>
+
+<div id='VCFtable'></div>
+</td></tr></table>
+
+<!-- ------------------------------------------------------ about view -------------------------------------------- -->
+
+<table border='0' cellpadding='1' cellspacing='1' style='display:block;' id="ABTview">
+<tr><td class='text'><br>
+
+Client-side, somewhat computationally intensive VCF viewer with filtering/export and some simple statistics (coming soon).<br>
+INFO field of .varscan2.anno.vcf files is parsed into separate sortable columns.<br><br>
+
+Not a good idea to load unfiltered VCFs (>500mb) or use this tool on slow computer/tablet/phone.<br>
+Server-side version is coming soooonish!<br>
+
+<br><hr height=2 width='120' color='#d0d0d0' align='left'><br>
+
+<b>Jun.8th&nbsp;&nbsp;2013</b> /// release 0.2 beta is out <br><br>
+<br><br><br>
+
+</td></tr>
+</table>
+<div id='progress'></div>
+</div>
+</body>
+</html>

@@ -1,0 +1,14 @@
+{% load url from future %}
+
+{% for study in study_list %}
+<h4><a href={% url "projects:project_list" study %}>{{ study.name }}</a></h4>
+<ul class="nav nav-pills nav-stacked nav-justified">
+    {% for project_ in study.project_set.all %}
+        {% if project_ == project %}
+            <li class="active"><a href="#">{{ project_.name }}</a></li>
+        {% else %}
+            <li><a href={% url "projects:project_detail" project_.name %}>{{ project_.name }}</a></li>
+        {% endif %}
+    {% endfor %}
+</ul>
+{% endfor %}

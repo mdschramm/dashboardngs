@@ -1,0 +1,130 @@
+{% load url from future %}
+<!DOCTYPE html>
+<html>
+    <head>
+	<!-- start: Meta -->
+	<meta charset="utf-8">
+	<title>{% block title %}{% endblock %}</title>
+	<meta name="description" content="Multiscale Dashboard">
+	<meta name="author" content="Mark Micchelli">
+	<!-- end: Meta -->
+	
+	<!-- start: Mobile Specific -->
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<!-- end: Mobile Specific -->
+	
+	<!-- start: CSS -->
+        <link id="bootstrap-style" href="{{ STATIC_URL }}css/bootstrap.min.css" rel="stylesheet">
+        <link href="{{ STATIC_URL }}css/bootstrap-responsive.min.css" rel="stylesheet">
+        <link id="base-style" href="{{ STATIC_URL }}css/style.css" rel="stylesheet">
+        <link id="base-style-responsive" href="{{ STATIC_URL }}css/style-responsive.css" rel="stylesheet">
+        <link href="{{ STATIC_URL }}table.css" rel="stylesheet">
+        <!-- this doesn't do what I want it to do :( -MM -->
+        <style>.popover { max-width:800px; width:auto; }</style>
+		{% block css %}
+		{% endblock %}
+	
+	<!--[if lt IE 7 ]>
+        <link id="ie-style" href="{{ STATIC_URL }}css/style-ie.css" rel="stylesheet">
+	<![endif]-->
+	<!--[if IE 8 ]>
+        <link id="ie-style" href="{{ STATIC_URL }}css/style-ie.css" rel="stylesheet">
+	<![endif]-->
+	<!--[if IE 9 ]>
+	<![endif]-->
+	
+	<!-- end: CSS -->
+	
+
+	<!-- The HTML5 shim, for IE6-8 support of HTML5 elements -->
+	<!--[if lt IE 9]>
+	  <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+	<![endif]-->
+    </head>
+    <body>
+        <div class="navbar">
+            <div class="navbar-inner">
+				<div class="container-fluid">
+					<a class="brand" href={% url "analysis:project_list" %}><span class="hidden-phone">Multiscale Dashboard</span></a>
+					<ul class="nav">
+                        {% if perms.runstatus.view_run %}
+                        <li><a href={% url "run_status:run_status" %}>Run Status</a></li>
+                        {% endif %}
+						{% if perms.analysis.view_cancer_seq %}
+						<li><a href={% url "analysis:project_list" %}>CancerSeq</a></li>
+						{% endif %}
+					</ul>
+					<ul class="nav pull-right">
+						{% if user.is_authenticated %}
+						<li><a href={% url "profile" %}>Profile</a></li>
+						<li><a href={% url "auth_logout" %}>Log out</a></li>
+						{% else %}
+						<li><a href={% url "auth_login" %}>Log in</a></li>
+						{% endif %}
+					</ul>
+					</span>
+				</div>
+            </div>
+        </div>
+        <div class="container-fluid">
+            <div class="row-fluid">
+				<div id="sidebar" class="span2">
+					{% block sidebar %}{% endblock %}
+				</div>
+				<div id="content" class="span10">
+					{% if messages %}
+					<div class="alert alert-important">
+						<button type="button" class="close" data-dismiss="alert">&times;</button>
+						{% for message in messages %}
+						<p{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</p>
+						{% endfor %}
+					</div>
+					{% endif %}
+					{% block content %}{% endblock %}
+				</div>
+            </div>
+			<div class="footer">
+				<p class="muted credit">
+				Website by <a href="mailto:mark.micchelli@mssm.edu">Mark Micchelli</a>
+				</p>
+			</div>
+        </div>
+
+        <!-- start: JavaScript-->
+        <script src="{{ STATIC_URL }}js/jquery-1.9.1.min.js"></script>
+        <script src="{{ STATIC_URL }}js/jquery-migrate-1.0.0.min.js"></script>
+        <script src="{{ STATIC_URL }}js/jquery-ui-1.10.0.custom.min.js"></script>
+        <script src="{{ STATIC_URL }}js/jquery.ui.touch-punch.js"></script>
+        <script src="{{ STATIC_URL }}js/bootstrap.min.js"></script>
+        <script src="{{ STATIC_URL }}js/jquery.cookie.js"></script>
+        <script src="{{ STATIC_URL }}js/fullcalendar.min.js"></script>
+        <script src="{{ STATIC_URL }}js/jquery.dataTables.min.js"></script>
+        <script src="{{ STATIC_URL }}js/excanvas.js"></script>
+        <script src="{{ STATIC_URL }}js/jquery.flot.min.js"></script>
+        <script src="{{ STATIC_URL }}js/jquery.flot.pie.min.js"></script>
+        <script src="{{ STATIC_URL }}js/jquery.flot.stack.js"></script>
+        <script src="{{ STATIC_URL }}js/jquery.flot.resize.min.js"></script>
+        <script src="{{ STATIC_URL }}js/jquery.chosen.min.js"></script>
+        <script src="{{ STATIC_URL }}js/jquery.uniform.min.js"></script>
+        <script src="{{ STATIC_URL }}js/jquery.cleditor.min.js"></script>
+        <script src="{{ STATIC_URL }}js/jquery.noty.js"></script>
+        <script src="{{ STATIC_URL }}js/jquery.elfinder.min.js"></script>
+        <script src="{{ STATIC_URL }}js/jquery.raty.min.js"></script>
+        <script src="{{ STATIC_URL }}js/jquery.iphone.toggle.js"></script>
+        <script src="{{ STATIC_URL }}js/jquery.uploadify-3.1.min.js"></script>
+        <script src="{{ STATIC_URL }}js/jquery.gritter.min.js"></script>
+        <script src="{{ STATIC_URL }}js/jquery.imagesloaded.js"></script>
+        <script src="{{ STATIC_URL }}js/jquery.masonry.min.js"></script>
+        <script src="{{ STATIC_URL }}js/jquery.knob.js"></script>
+        <script src="{{ STATIC_URL }}js/jquery.sparkline.min.js"></script>
+        <script src="{{ STATIC_URL }}js/custom.js"></script>
+        <script src="{{ STATIC_URL }}geneform.js"></script>
+        <script>
+            $('.readspopover').popover({"placement":"left", "trigger":"hover", "html":"true"});
+            $('.upload-button').tooltip({"title":"Click to upload a file."});
+        </script>
+        {% block javascript %}
+        {% endblock %}
+        <!-- end: JavaScript-->
+    </body>
+</head>

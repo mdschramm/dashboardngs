@@ -1,0 +1,100 @@
+{% load url from future %}
+{% load upload_tags %}
+{% load comment_tags %}
+
+<table>
+    <thead>
+        <tr>
+            <td></td>
+            {% if project.wgs and project.wes %}
+                <td><span class="letterP4">E+G</span></td>
+            {% elif project.wgs %}
+                <td><span class="letterP4">WGS</span></td>
+            {% elif project.wes %}
+                <td><span class="letterP4">WES</span></td>
+            {% endif %}
+            {% if project.rna %}
+                <td><span class="letterP4">RNA</span></td>
+            {% endif %}
+         </tr>
+     </thead>
+     <tbody>
+        {% for sample in project.samples %}
+            <tr>
+                <td>{{ sample }}</td>
+                {% if project.wgs or project.wes %}
+                    <td>
+                        <a href="#" class="sample-tooltip" data-title="{{ sample.metric_status }}"><span class="label
+                                {% if sample.metric_status == 'Done.' %}
+                                label-success
+                                {% elif sample.metric_status == 'Not yet cleaned.' or sample.metric_status == 'FASTQs Not Ready.' %}
+                                label-important
+                                {% else %}
+                                label-warning
+                                {% endif %}">&nbsp;</span></a>
+                    </td>
+                {% endif %}
+                {% if project.rna %}
+                    {% if not sample.tumor %}
+                        <td>&nbsp;</td>
+                    {% else %}
+                        <td>
+                            <a href="#" class="sample-tooltip" data-title="{{ sample.rna_metric_status }}"><span class="label
+                                    {% if sample.rna_metric_status == 'Done.' %}
+                                    label-success
+                                    {% else %}
+                                    label-important
+                                    {% endif %}">&nbsp;</span></a>
+                        </td>
+                    {% endif %}
+                {% endif %}
+            </tr>
+        {% endfor %}
+        <tr>
+            <td colspan=3>
+                {% comment project "metric" %}
+                <div class="btn-group">
+                    {% if project.metrics %}
+                        <a class="btn btn-mini dropdown-toggle" data-toggle="dropdown" href="#">QCs<span class="caret"></span></a>
+                        <ul class="dropdown-menu pull-right">
+                            {% for classification, pretty_print in project.metrics.0.dna_classifications %}
+                                <li><strong>{{ pretty_print }}</strong></li>
+                                {% for item in project.metrics %}
+                                    {% if item.classification == classification %}
+                                        <li><a href="{{ item.symlink_url }}" target="_blank">{{ item }}</a></li>
+                                    {% endif %}
+                                {% endfor %}
+                                <li class="divider"></li>
+                            {% endfor %}
+                            <li><strong>RNA</strong></li>
+                            {% for item in project.metrics %}
+                                {% if item.classification == "rna" %}
+                                <li><a href="{{ item.symlink_url }}" target="_blank">RNA Seq Report ({{ item.sample.name }})</a></li>
+                                {% endif %}
+                            {% endfor %}
+                            {% for item in project.metrics %}
+                                {% if item.classification == "three_prime" and ".txt" in item.name %}
+                                <li><a href="{{ item.symlink_url }}" target="_blank">3' Bias Raw Data ({{ item.sample.name }})</a></li>
+                                {% endif %}
+                            {% endfor %}
+                            {% for item in project.metrics %}
+                                {% if item.classification == "three_prime" and ".png" in item.name %}
+                                <li><a href="{{ item.symlink_url }}" target="_blank">3' Bias Image ({{ item.sample.name }})</a></li>
+                                {% endif %}
+                            {% endfor %}
+                            <li class="divider"></li>
+                            <li><strong>Other</strong></li>
+                            {% for item in project.metrics %}
+                                {% if item.classification == "other" %}
+                                <li><a href="{{ item.symlink_url }}" target="_blank">{{ item }}</a></li>
+                                {% endif %}
+                            {% endfor %}
+                        </ul>
+                    {% else %}
+                        <a class="btn btn-mini disabled">QCs<span class="caret"></span></a>
+                    {% endif %}
+                </div>
+            </td>
+        </tr>
+    </tbody>
+</table>

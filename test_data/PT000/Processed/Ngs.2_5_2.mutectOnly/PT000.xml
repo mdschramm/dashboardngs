@@ -1,0 +1,7 @@
+<?xml version="1.0"?>
+<cohort>
+	<fastq sample="PT000_Normal">
+	</fastq>
+	<fastq sample="PT000_Tumor" normal="PT000_Normal" purity="0.52">
+	</fastq>
+</cohort>
