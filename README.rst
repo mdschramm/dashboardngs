@@ -4,7 +4,8 @@ Multiscale Dashboard
 
 The majority of this project was built by Mark Micchelli, a full-time employee at 
 Mt. Sinai whom I worked with. This is the version of the dashboard when I left Mt. 
-Sinai. As an intern, I coded and contributed to the following files:
+Sinai. The project was originally remotely stored on bitbucket.org, so I moved it here
+As an intern, I coded and contributed to the following files:
 
 dashboardngs/pbg/apps/analysis/forms.py 
 dashboardngs/pbg/apps/analysis/models.py
