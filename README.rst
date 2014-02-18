@@ -2,6 +2,31 @@
 Multiscale Dashboard
 ====================
 
+The majority of this project was built by Mark Micchelli, a full-time employee at 
+Mt. Sinai whom I worked with. This is the version of the dashboard when I left Mt. 
+Sinai. As an intern, I coded and contributed to the following files:
+
+dashboardngs/pbg/apps/analysis/forms.py 
+dashboardngs/pbg/apps/analysis/models.py
+dashboardngs/pbg/apps/analysis/views.py
+
+dashboardngs/pbg/apps/analysis/static/analysis.js
+dashboardngs/pbg/apps/analysis/static/geneform.js
+dashboardngs/pbg/apps/analysis/static/resultsTable.js
+
+dashboardngs/pbg/apps/analysis/templates/minitable_bam.html
+dashboardngs/pbg/apps/analysis/templates/minitable_fastq.html
+dashboardngs/pbg/apps/analysis/templates/minitable_metric.html
+dashboardngs/pbg/apps/analysis/templates/minitable_pathology.html
+dashboardngs/pbg/apps/analysis/templates/minitable_sequencing.html
+dashboardngs/pbg/apps/analysis/templates/minitable_vcf.html
+dashboardngs/pbg/apps/analysis/templates/project_detail.html
+dashboardngs/pbg/apps/analysis/templates/project_list.html
+
+dashboardngs/pbg/static/table.css
+
+
+
 Here is a brief breakdown of the files in the repo:
 
 * dashboardngstests/
